@@ -1,3 +1,6 @@
+#!/bin/bash
+# Install mongodb on Azure virtual machine script
+
 # Configure mongodb.list file with the correct location
 sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 9DA31620334BD75D9DCB49F368818C72E52529D4
 echo "deb http://repo.mongodb.org/apt/ubuntu "$(lsb_release -sc)"/mongodb-org/4.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.0.list
@@ -21,4 +24,4 @@ sudo apt-get install -y mongodb-org
 # sudo service mongod restart 
 
 #duc add this
-#sudo mongod 
+#sudo mongod --dbpath=/var/lib/mongodb --bind_ip_all

@@ -1,5 +1,5 @@
 #!/bin/bash
-# A simple Azure Storage example script
+# Azure Storage script
 
 export AZURE_STORAGE_ACCOUNT=<storageaccountname>
 export AZURE_STORAGE_KEY=<storageaccountkey>
