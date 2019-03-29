@@ -232,6 +232,19 @@
             }
           },
           {
+            "name": "ssh-allow-inbound",
+            "properties": {
+              "priority": 200,
+              "sourceAddressPrefix": "*",
+              "protocol": "Tcp",
+              "destinationPortRange": "22",
+              "access": "Allow",
+              "direction": "Inbound",
+              "sourcePortRange": "*",
+              "destinationAddressPrefix": "*"
+            }
+          },
+          {
             "name": "db-allow-outbound",
             "properties": {
               "priority": 100,
