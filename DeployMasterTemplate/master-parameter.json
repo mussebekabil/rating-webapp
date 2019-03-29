@@ -1,0 +1,21 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "adminUsername": {
+            "value": "devAdmin"
+        },
+        "adminPassword": {
+            "value": "ZXt1S@2#u^5g.Fpg"
+        },
+        "dnsNameForPublicIP": {
+            "value": "devteamvmdb"
+        },
+        "backendAppName": {
+            "value": "devteamAPI"
+        },
+        "frontendStorageAccountName": {
+            "value": "devteamfrontend-week3-2"
+        }
+    }
+}

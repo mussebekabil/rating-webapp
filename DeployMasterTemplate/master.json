@@ -1,51 +1,115 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-      "dnsNameForPublicIP": {
-        "type": "string",
-        "metadata": {
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "dnsNameForPublicIP": {
+    "type": "string",
+      "metadata": {
           "description": "DNS Name for Public IP"
-        }
+      }
+    },
+    "adminUsername": {
+      "type": "string",
+      "metadata": {
+        "description": "Admin Username"
+      }
+    },
+    "backendAppName": {
+      "type": "string",
+      "defaultValue" : "AzureLinuxApp",
+      "metadata": {
+        "description": "Base name of the resource such as web app name and app service plan "
       },
-      "adminUsername": {
-        "type": "string",
-        "metadata": {
-          "description": "Admin Username"
-        }
-      },
-      "adminPassword": {
-        "type": "securestring",
-        "metadata": {
-          "description": "Admin Password"
+      "minLength": 2
+    },
+    "backendApplocation": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]",
+      "metadata": {
+        "description": "Location for all resources."
+      }
+    },
+    "adminPassword": {
+      "type": "securestring",
+      "metadata": {
+      "description": "Admin Password"
+      }
+    },
+    "frontendStorageAccountName": {
+      "type": "string",
+      "metadata": {
+      "description": "Frontend storage account name"
+      }
+    }
+  },
+  "variables": {},
+  "resources": [
+    { 
+      "apiVersion": "2017-05-10",
+      "name": "MongoVMDeployment",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+        "uri": "https://raw.githubusercontent.com/mussebekabil/rating-webapp/master/DeployMongoVM/azuredeploy.json",
+        "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "adminUsername": {
+              "value": "[parameters('adminUsername')]"
+            },
+          "adminPassword": {
+              "value": "[parameters('adminPassword')]"
+          },
+          "dnsNameForPublicIP": {
+              "value": "[parameters('dnsNameForPublicIP')]"
+          }
         }
       }
-    },
-    "variables": {},
-    "resources": [
-      {
-        "apiVersion": "2017-05-10",
-        "name": "MongoVMDeployment",
-        "type": "Microsoft.Resources/deployments",
-        "properties": {
-          "mode": "Incremental",
-          "templateLink": {
-            "uri": "https://raw.githubusercontent.com/mussebekabil/rating-webapp/master/mongoVM/mongoVM.json",
-            "contentVersion": "1.0.0.0"
-          },
-          "parameters": {
-              "adminUsername": {
-                  "value": "[parameters('adminUsername')]"
-              },
-              "adminPassword": {
-                  "value": "[parameters('adminPassword')]"
-              },
-              "dnsNameForPublicIP": {
-                "value": "[parameters('dnsNameForPublicIP')]"
-              }
-          }
-        }
-      }
-    ],
-    "outputs": {}
-  }
+    },
+    { 
+      "apiVersion": "2017-05-10",
+      "name": "BackendDeployment",
+      "type": "Microsoft.Resources/deployments",
+      "dependsOn": [
+        "[concat('Microsoft.Resources/deployments/', 'MongoVMDeployment')]"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+        "uri": "https://raw.githubusercontent.com/mussebekabil/rating-webapp/master/DeployAPIWebAPP/azuredeploy.json",
+        "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "webAppName": {
+              "value": "[parameters('backendAppName')]"
+            },
+          "location": {
+              "value": "[parameters('backendApplocation')]"
+          },
+          "mongodb-url" : {
+              "value": "[concat('mongodb://',reference('MongoVMDeployment').outputs.publicIPAddress.value,':27017/webratings')]"
+          }
+        }
+      }
+    },
+    { 
+      "apiVersion": "2017-05-10",
+      "name": "FrontEndDeployment",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+        "uri": "https://raw.githubusercontent.com/mussebekabil/rating-webapp/master/DeployStorageAccount/azuredeploy.json",
+        "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "storageAccountName": {
+              "value": "[parameters('frontendStorageAccountName')]"
+            }
+        }
+      }
+    }
+  ],
+  "outputs": {}
+}
