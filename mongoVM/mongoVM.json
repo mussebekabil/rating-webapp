@@ -102,7 +102,7 @@
     "addressPrefix": "10.0.0.0/16",
     "subnet1Name": "Subnet-1",
     "subnet1Prefix": "10.0.0.0/24",
-    "publicIPAddressType": "Dynamic",
+    "publicIPAddressType": "Static",
     "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',parameters('virtualNetworkName'))]",
     "subnet1Ref": "[concat(variables('vnetID'),'/subnets/',variables('subnet1Name'))]"
   },
@@ -112,6 +112,7 @@
       "type": "Microsoft.Network/publicIPAddresses",
       "name": "[parameters('publicIPAddressName')]",
       "location": "[parameters('location')]",
+ 
       "properties": {
         "publicIPAllocationMethod": "[variables('publicIPAddressType')]",
         "dnsSettings": {
@@ -261,15 +262,15 @@
         "autoUpgradeMinorVersion": true,
         "settings": {
           "fileUris": [
-            "https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/mongodb-on-ubuntu/mongo-install-ubuntu.sh"
+            "https://raw.githubusercontent.com/nnduc1994/public_bash/master/install_mongo.sh"
           ],
-          "commandToExecute": "sh mongo-install-ubuntu.sh"
+          "commandToExecute": "sh install_mongo.sh"
         }
       }
     }
   ],
   "outputs": {
-    "dbPublicIPAddress": {
+    "publicIPAddress": {
       "type": "string",
       "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses',parameters('publicIPAddressName'))).IpAddress]"
     }
