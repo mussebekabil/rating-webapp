@@ -4,25 +4,32 @@
   "parameters": {
     "webAppName": {
       "type": "string",
-      "defaultValue" : "AzureLinuxApp",
+      "defaultValue": "AzureLinuxApp",
       "metadata": {
         "description": "Base name of the resource such as web app name and app service plan "
       },
       "minLength": 2
     },
-    "sku":{
+    "sku": {
       "type": "string",
-      "defaultValue" : "S1",
+      "defaultValue": "S1",
       "metadata": {
         "description": "The SKU of App Service Plan "
       }
     },
-    "linuxFxVersion" : {
-        "type": "string",
-        "defaultValue" : "Node.js|8.2",
-        "metadata": {
-          "description": "The Runtime stack of current web app"
-        }
+    "mongodb-url": {
+      "type": "string",      
+      "metadata": {
+        "description": "The mongodb connection string "
+      }
+    },
+
+    "linuxFxVersion": {
+      "type": "string",
+      "defaultValue": "Node.js|8.2",
+      "metadata": {
+        "description": "The Runtime stack of current web app"
+      }
     },
     "location": {
       "type": "string",
@@ -47,8 +54,8 @@
       "sku": {
         "name": "[parameters('sku')]"
       },
-      "properties":{
-        "reserved":true
+      "properties": {
+        "reserved": true
       }
     },
     {
@@ -60,12 +67,37 @@
       "properties": {
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]",
         "siteConfig": {
-            "linuxFxVersion": "[parameters('linuxFxVersion')]"
-          }
+          "linuxFxVersion": "[parameters('linuxFxVersion')]"
+        }
       },
       "dependsOn": [
         "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]"
+      ],
+      "resources": [
+        {
+          "name": "appsettings",
+          "type": "config",
+          "apiVersion": "2015-08-01",
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/sites', variables('webAppPortalName'))]"
+          ],
+          "tags": {
+            "displayName": "mongodb-url"
+          },
+          "properties": {
+            "MONGODB_URI": "[parameters('mongodb-url')]",
+            "key2": "value2"
+          }
+        }
       ]
     }
-  ]
+  ],
+
+  "outputs": {
+    "appurl": {
+      "type": "string",
+      "value": "[concat(variables('webAppPortalName'),'.azurewebsites.net')]"
+
+    }
+  }
 }
