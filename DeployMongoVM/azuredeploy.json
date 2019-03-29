@@ -277,7 +277,7 @@
           "fileUris": [
             "https://raw.githubusercontent.com/mussebekabil/rating-webapp/master/Scripts/install_mongodb.sh"
           ],
-          "commandToExecute": "sh install_mongo.sh"
+          "commandToExecute": "sh install_mongodb.sh"
         }
       }
     }
