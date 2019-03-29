@@ -2,27 +2,47 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-      "containerUri": {
-        "type": "string"
-      },
-      "containerSasToken": {
-        "type": "string"
-      }
+      "dnsNameForPublicIP": {
+        "type": "string",
+        "metadata": {
+          "description": "DNS Name for Public IP"
+        }
+      },
+      "adminUsername": {
+        "type": "string",
+        "metadata": {
+          "description": "Admin Username"
+        }
+      },
+      "adminPassword": {
+        "type": "securestring",
+        "metadata": {
+          "description": "Admin Password"
+        }
+      }
     },
     "variables": {},
     "resources": [
       {
         "apiVersion": "2017-05-10",
-        "name": "linkedTemplate",
+        "name": "MongoVMDeployment",
         "type": "Microsoft.Resources/deployments",
         "properties": {
           "mode": "Incremental",
           "templateLink": {
-            "uri": "blob.com/",
+            "uri": "https://raw.githubusercontent.com/mussebekabil/rating-webapp/master/mongoVM/mongoVM.json",
             "contentVersion": "1.0.0.0"
           },
           "parameters": {
-
+              "adminUsername": {
+                  "value": "[parameters('adminUsername')]"
+              },
+              "adminPassword": {
+                  "value": "[parameters('adminPassword')]"
+              },
+              "dnsNameForPublicIP": {
+                "value": "[parameters('dnsNameForPublicIP')]"
+              }
           }
         }
       }
