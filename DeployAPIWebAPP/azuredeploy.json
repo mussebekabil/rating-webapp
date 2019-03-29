@@ -85,7 +85,7 @@
             "displayName": "mongodb-url"
           },
           "properties": {
-            "MONGODB_URI": "[parameters('mongodb-url')]",
+            "key1": "[parameters('mongodb-url')]",
             "key2": "value2"
           }
         }
