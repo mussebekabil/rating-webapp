@@ -275,7 +275,7 @@
         "autoUpgradeMinorVersion": true,
         "settings": {
           "fileUris": [
-            "https://raw.githubusercontent.com/nnduc1994/public_bash/master/install_mongo.sh"
+            "https://raw.githubusercontent.com/mussebekabil/rating-webapp/master/Scripts/install_mongodb.sh"
           ],
           "commandToExecute": "sh install_mongo.sh"
         }
