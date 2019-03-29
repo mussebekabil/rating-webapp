@@ -6,7 +6,10 @@
             "value": "Standard_LRS"
         },
         "location": {
-            "value": "westeurope"
+            "value": "northeurope"
+        },
+        "storageAccountName": {
+            "value": "devfrontendstorageweek3"
         }
     }
 }
