@@ -14,6 +14,21 @@
           "description": "Admin Username"
         }
       },
+      "backendAppName": {
+        "type": "string",
+        "defaultValue" : "AzureLinuxApp",
+        "metadata": {
+          "description": "Base name of the resource such as web app name and app service plan "
+        },
+        "minLength": 2
+      },
+      "backendApplocation": {
+        "type": "string",
+        "defaultValue": "[resourceGroup().location]",
+        "metadata": {
+          "description": "Location for all resources."
+        }
+      },
       "adminPassword": {
         "type": "securestring",
         "metadata": {
@@ -45,7 +60,27 @@
               }
           }
         }
-      }
+      },
+      {
+          "apiVersion": "2017-05-10",
+          "name": "BackendDeployment",
+          "type": "Microsoft.Resources/deployments",
+          "properties": {
+            "mode": "Incremental",
+            "templateLink": {
+              "uri": "https://raw.githubusercontent.com/mussebekabil/rating-webapp/master/api/azuredeploy.json",
+              "contentVersion": "1.0.0.0"
+            },
+            "parameters": {
+                "webAppName": {
+                    "value": "[parameters('backendAppName')]"
+                },
+                "location": {
+                    "value": "[parameters('backendApplocation')]"
+                }
+            }
+          }
+        }
     ],
     "outputs": {}
   }
